@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173b70">
+<title>Acceso | Ente Territorial · GrisData</title>
+<link rel="icon" href="apple-touch-icon.png">
+<style>
+:root{color-scheme:dark;--bg:#07111f;--card:#101d30;--line:#253953;--text:#f3f7fc;--muted:#a8b7cb;--blue:#3478f6;}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at top,#15345b 0, var(--bg) 60%);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
+.card{width:min(100%,440px);padding:34px;border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:0 24px 80px #0006}
+.brand{font-weight:800;font-size:23px;letter-spacing:.04em;margin-bottom:30px}.brand span{color:#69a0ff}.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#78a9ff}h1{font-size:27px;line-height:1.2;margin:8px 0}p{color:var(--muted)}label{display:block;margin:18px 0 7px;font-size:14px}input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:#091526;color:var(--text);font:inherit}button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;background:var(--blue);color:white;font:inherit;font-weight:700;cursor:pointer}.notice{margin-top:20px;padding:12px;border:1px solid #725c2d;background:#302817;color:#f8dfa0;border-radius:10px;font-size:13px}a{color:#9dc0ff}.back{display:inline-block;margin-top:20px;text-decoration:none;font-size:14px}
+</style>
+</head>
+<body><main class="card">
+<div class="brand"><span>Gris</span>Data</div>
+<div class="eyebrow">Módulo Aseguramiento</div>
+<h1>Acceso de Ente Territorial</h1>
+<p>Esta es una pantalla provisional para organizar el acceso institucional a GrisData.</p>
+<form id="demo-form">
+<label for="usuario">Usuario o correo institucional</label><input id="usuario" name="usuario" autocomplete="username" placeholder="usuario@entidad.gov.co" required>
+<label for="clave">Contraseña</label><input id="clave" name="clave" type="password" autocomplete="current-password" placeholder="Contraseña" required>
+<button type="submit">Iniciar sesión</button>
+</form>
+<div id="aviso" class="notice">Acceso de demostración: la autenticación aún no está conectada. No ingreses contraseñas reales.</div>
+<a class="back" href="./index.html#/">&larr; Volver a GrisData</a>
+</main>
+<script>document.getElementById('demo-form').addEventListener('submit',function(e){e.preventDefault();document.getElementById('aviso').textContent='La autenticación de esta entidad todavía no está habilitada. No se envió ni guardó ningún dato.';});</script>
+</body></html>
