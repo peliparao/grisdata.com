@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#173b70">
+<title>TÍTULO DE LA PÁGINA | GrisData</title>
+<link rel="icon" href="assets/grisdata.png">
+<link rel="stylesheet" href="assets/grisdata.css">
+<script src="assets/auth.js"></script>
+</head>
+<!-- Páginas protegidas: class="gd-lock" + GD.guard() al final. Páginas públicas: <body> sin clase, sin guard y sin la línea de auth.js.
+     Esta plantilla va en la carpeta del cliente (huv/). Si la página queda en una subcarpeta, usa ../assets/ en las rutas. -->
+<body class="gd-lock"><main>
+<div class="topbar"><a class="logo" href="proyectos.html" title="Proyectos HUV"><img src="assets/grisdata.png" alt="GrisData"></a>
+<div class="user" id="gd-user" hidden><a class="lnk" href="proyectos.html">← Proyectos</a><span class="av" id="gd-av"></span><span id="gd-un"></span><button type="button" id="gd-out" class="ghost">Salir</button></div></div>
+<header class="hd">
+  <!-- Solo en proyectos del HUV: -->
+  <div class="hl"><img src="assets/huv.png" alt="Hospital Universitario del Valle Evaristo García E.S.E. · 70 años · Acreditación en salud"></div>
+  <h1>Título de la página</h1><p class="sb">Subtítulo en verde azulado</p>
+  <p class="desc">Descripción corta de la página o del proyecto.</p>
+</header>
+<section class="card"><h2><span class="n">1</span>Sección</h2>
+<p>Contenido. Componentes: <code>.card</code>, <code>.grid</code>, <code>.two</code>, <code>.box</code>, <code>.pg</code>/<code>.pc</code> (tarjetas de proyecto), <code>.badge</code>, tablas, botones y campos.</p></section>
+<footer class="ft"><p>© 2026 GrisData. Todos los derechos reservados.</p><p>Diseño de Ing. Diego Campos · GrisData</p></footer>
+</main><script>GD.guard();</script></body></html>
