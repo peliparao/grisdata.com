@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173b70">
+<title>HUV · Comparativo de cirugía robótica Da Vinci vs Toumai</title>
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<script src="assets/auth.js"></script>
+<style>
+:root{
+  --navy:#173b70; --navy2:#22508f; --teal:#0f8b8d; --teal-soft:#e3f4f3;
+  --bg:#eef3f9; --bg2:#f6f9fc; --card:#ffffff; --line:#dbe4ef; --ink:#14233b; --ink2:#4a5a72; --muted:#7a889c;
+  --dv:#2f5fa8; --tm:#0f9a8e; --good:#1f7a4d; --good-bg:#e5f4ec; --warn:#9a6500; --warn-bg:#fdf1dc; --bad:#b3261e; --bad-bg:#fbe7e5;
+  --shadow:0 2px 6px rgba(23,59,112,.06),0 8px 24px rgba(23,59,112,.08); --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
+a{color:var(--navy2)}
+.topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.topbar .in{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 24px}
+.topbar img.gd{height:34px}
+.topbar .brand-fallback{font-weight:800;color:var(--navy);letter-spacing:.5px}
+.topbar .sp{flex:1}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{border:0;background:transparent;padding:8px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer}
+.tab:hover{background:var(--bg2)}
+.tab.on{background:var(--navy);color:#fff}
+.wrap{max-width:1440px;margin:0 auto;padding:22px 24px 60px}
+.hero{background:linear-gradient(120deg,var(--navy) 0%,#1d4d8c 55%,var(--teal) 130%);color:#fff;border-radius:var(--r);padding:22px 26px;display:flex;gap:20px;align-items:center;box-shadow:var(--shadow)}
+.hero .logo{background:#fff;border-radius:12px;padding:8px 10px;display:flex;align-items:center;min-width:86px;justify-content:center}
+.hero .logo img{height:58px}
+.hero .logo .fb{font-weight:800;color:var(--navy);font-size:22px}
+.hero h1{margin:0 0 4px;font-size:22px;line-height:1.25}
+.hero p{margin:0;opacity:.9;max-width:980px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:1fr 1fr}
+@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px}
+.card h2{font-size:16px;margin:0 0 4px;color:var(--navy)}
+.card h3{font-size:14px;margin:14px 0 6px;color:var(--navy)}
+.card .sub{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+.kpi .lab{color:var(--ink2);font-size:12.5px;font-weight:600}
+.kpi .val{font-size:26px;font-weight:700;margin:4px 0 2px;color:var(--ink)}
+.kpi .det{font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.mt{margin-top:16px}
+.params{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:10px 14px}
+.params label{display:flex;flex-direction:column;font-size:12px;color:var(--ink2);font-weight:600;gap:4px}
+.params input,.params select,.filters input,.filters select{font:inherit;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:var(--bg2);color:var(--ink)}
+.params input:focus,.filters input:focus,.filters select:focus{outline:2px solid var(--teal);border-color:transparent}
+.params .grp{grid-column:1/-1;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--teal);font-weight:700;margin-top:6px;border-top:1px dashed var(--line);padding-top:10px}
+.params .grp:first-child{border-top:0;margin-top:0;padding-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:11px}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;font:inherit;font-weight:600;padding:6px 12px;border-radius:999px;color:var(--ink2);cursor:pointer}
+.seg button.on{background:var(--teal);color:#fff}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.filters input{min-width:240px}
+.btn{border:1px solid var(--navy);background:#fff;color:var(--navy);font:inherit;font-weight:600;border-radius:9px;padding:7px 12px;cursor:pointer}
+.btn:hover{background:var(--navy);color:#fff}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:72vh}
+table{border-collapse:collapse;width:100%;font-size:12.3px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{position:sticky;top:0;background:#f2f6fb;color:var(--navy);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;z-index:2;white-space:nowrap;cursor:pointer}
+thead tr.g th{top:0;text-align:center;cursor:default}
+thead tr.h th{top:31px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:#f7fafd}
+tr.sel td{background:#eaf4f3 !important}
+.esp{color:var(--muted);font-size:11.5px}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.pD{background:var(--good-bg);color:var(--good)}
+.pA{background:var(--warn-bg);color:var(--warn)}
+.pN{background:var(--bad-bg);color:var(--bad)}
+.up{color:var(--bad);font-weight:600}
+.down{color:var(--good);font-weight:600}
+.colDV{border-left:3px solid var(--dv)}
+.colTM{border-left:3px solid var(--tm)}
+.small{font-size:11.5px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:16px;align-items:start}
+@media(max-width:1200px){.layout{grid-template-columns:1fr}}
+.detail{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto}
+.bd{width:100%;font-size:12.5px}
+.bd td{padding:5px 6px}
+.bd tr.tot td{font-weight:700;border-top:2px solid var(--navy);border-bottom:0}
+.bd tr.minus td{color:var(--good)}
+.box{background:var(--bg2);border-radius:10px;padding:10px 12px;font-size:12.3px;white-space:pre-wrap;color:var(--ink2);max-height:180px;overflow:auto}
+.note{background:var(--teal-soft);border-left:4px solid var(--teal);border-radius:8px;padding:10px 12px;font-size:12.8px}
+.warnbox{background:var(--warn-bg);border-left:4px solid var(--warn);border-radius:8px;padding:10px 12px;font-size:12.8px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);margin-bottom:6px;flex-wrap:wrap}
+svg text{font-family:inherit}
+.tt{position:fixed;pointer-events:none;background:#14233b;color:#fff;font-size:12px;padding:8px 10px;border-radius:8px;box-shadow:var(--shadow);z-index:50;display:none;max-width:280px}
+.cmp td:first-child{font-weight:600;color:var(--navy);width:24%}
+.cmp td{font-size:13px}
+ul.tight{margin:6px 0;padding-left:18px}
+ul.tight li{margin:3px 0}
+.view{display:none}.view.on{display:block}
+.footer{color:var(--muted);font-size:12px;margin-top:24px;text-align:center}
+.formula{font-family:Consolas,monospace;background:var(--bg2);padding:10px 12px;border-radius:10px;font-size:12.5px;overflow:auto}
+body.gd-lock{visibility:hidden}
+.topbar .user{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)}
+.topbar .user[hidden]{display:none}
+.topbar .user .lnk{color:var(--navy2);font-weight:600;text-decoration:none;white-space:nowrap}
+.topbar .user .av{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.topbar .user button{font:inherit;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:6px 14px;cursor:pointer}
+.topbar .user button:hover{background:var(--bg2)}
+@media(max-width:1400px){.topbar .user #gd-un{display:none}}@media(max-width:900px){.topbar .in{flex-wrap:wrap}}
+</style>
+</head>
+<body class="gd-lock">
+<div id="gd-load" style="position:fixed;inset:0;z-index:99;display:grid;place-items:center;background:#eef3f9;color:#173b70;font-weight:600;font-family:system-ui,sans-serif">Cargando análisis…</div>
+<div class="topbar"><div class="in">
+  <a href="proyectos.html" title="Proyectos HUV"><img class="gd" src="assets/grisdata.png" alt="GrisData" onerror="this.outerHTML='<span class=brand-fallback>GrisData</span>'"></a>
+  <div class="sp"></div>
+  <nav class="tabs">
+    <button class="tab on" data-v="resumen">Resumen</button>
+    <button class="tab" data-v="comparativo">Comparativo por procedimiento</button>
+    <button class="tab" data-v="modelo">Compra vs. cuentas en participación</button>
+    <button class="tab" data-v="clinico">Concepto clínico</button>
+    <button class="tab" data-v="metodo">Metodología</button>
+  </nav>
+  <div class="user" id="gd-user" hidden><a class="lnk" href="proyectos.html">← Proyectos</a><span class="av" id="gd-av"></span><span id="gd-un"></span><button type="button" id="gd-out">Salir</button></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="logo"><img src="assets/huv.png" alt="Hospital Universitario del Valle" onerror="this.outerHTML='<span class=fb>HUV</span>'"></div>
+    <div>
+      <h1>Hospital Universitario del Valle · Comparativo de cirugía robótica: Da Vinci vs. Toumai</h1>
+      <p>Cruce de la oferta de paquetes integrales HUV con los procedimientos que cotizan ambas plataformas. Para cada cirugía se arma la tarifa robótica que HUV presentaría a las EPS: paquete HUV + costo del robot y sus consumibles + margen + honorario del cirujano de consola, ajustando estancias.</p>
+    </div>
+  </div>
+
+  <!-- PARAMETROS -->
+  <div class="card mt">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div><h2>Supuestos del modelo</h2><p class="sub" style="margin:0">Todos los valores son editables y recalculan la página. Los valores de estancia son referenciales: reemplácelos por la tarifa contractual HUV.</p></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <span class="small">Escenario de tarifa</span>
+        <div class="seg" id="scen"><button data-s="plena" class="on">Plena</button><button data-s="opt">Optimizada</button></div>
+        <button class="btn" id="reset">Restablecer</button>
+      </div>
+    </div>
+    <div class="params mt" id="params"></div>
+  </div>
+
+  <!-- RESUMEN -->
+  <section class="view on" id="v-resumen">
+    <div class="grid g4 mt" id="kpis"></div>
+    <div class="grid g2 mt">
+      <div class="card">
+        <h2>Incremento promedio de la tarifa por especialidad</h2>
+        <p class="sub">Tarifa robótica propuesta frente al paquete HUV actual (solo procedimientos con paquete homologado).</p>
+        <div class="legend"><span><span class="dot" style="background:var(--dv)"></span>Da Vinci</span><span><span class="dot" style="background:var(--tm)"></span>Toumai</span></div>
+        <div id="chEsp"></div>
+      </div>
+      <div class="card">
+        <h2>Tarifa robótica HUV frente al precio de referencia de mercado</h2>
+        <p class="sub">El precio de referencia es el promedio de Bogotá que reporta Toumai. Cada punto es un procedimiento; debajo de la diagonal HUV queda más barato que el mercado.</p>
+        <div class="legend"><span><span class="dot" style="background:var(--dv)"></span>Da Vinci</span><span><span class="dot" style="background:var(--tm)"></span>Toumai</span></div>
+        <div id="chRef"></div>
+      </div>
+    </div>
+    <div class="card mt">
+      <h2>Lectura rápida</h2>
+      <div id="lectura"></div>
+    </div>
+  </section>
+
+  <!-- COMPARATIVO -->
+  <section class="view" id="v-comparativo">
+    <div class="layout mt">
+      <div class="card">
+        <h2>Comparativo por procedimiento</h2>
+        <p class="sub">Haga clic en un procedimiento para ver el desglose, las inclusiones del paquete HUV y los consumibles de cada robot. Clic en el encabezado para ordenar.</p>
+        <div class="filters">
+          <input id="q" placeholder="Buscar procedimiento o código HUV…">
+          <select id="fEsp"><option value="">Todas las especialidades</option></select>
+          <select id="fTipo"><option value="">Toda homologación</option><option value="D">Directa</option><option value="A">Aproximada</option><option value="N">Sin paquete HUV</option></select>
+          <button class="btn" id="csv">Descargar CSV</button>
+        </div>
+        <div class="tablewrap"><table id="tbl">
+          <thead>
+            <tr class="g"><th colspan="3"></th><th colspan="2" class="colDV" style="color:var(--dv)">Da Vinci</th><th colspan="3" class="colTM" style="color:var(--tm)">Toumai</th><th></th></tr>
+            <tr class="h">
+              <th data-k="proc">Procedimiento</th><th data-k="huvcod">Paquete HUV</th><th class="n" data-k="huvt">Tarifa HUV</th>
+              <th class="n colDV" data-k="dvr">Robot / cx</th><th class="n" data-k="dvt">Tarifa robot.</th>
+              <th class="n colTM" data-k="tmr">Robot / cx</th><th class="n" data-k="tmt">Tarifa robot.</th><th class="n" data-k="tmd">Δ vs HUV</th>
+              <th class="n" data-k="ref">Ref. mercado</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table></div>
+        <p class="small" style="margin-top:8px">Δ vs HUV de Da Vinci se ve en el desglose. "Robot / cx" en Da Vinci = consumibles + amortización, financiación y mantenimiento por cirugía (o la tarifa de cuentas en participación si se digita).</p>
+      </div>
+      <div class="card detail" id="detail"><h2>Seleccione un procedimiento</h2><p class="sub">El desglose aparece aquí.</p></div>
+    </div>
+  </section>
+
+  <!-- MODELO -->
+  <section class="view" id="v-modelo">
+    <div class="grid g2 mt">
+      <div class="card">
+        <h2>Costo del robot por cirugía según volumen anual</h2>
+        <p class="sub">Da Vinci comprado (curva) frente a la tarifa por cirugía de Toumai en cuentas en participación (línea plana). El cruce es el volumen a partir del cual comprar sale más barato.</p>
+        <div class="filters"><select id="selProc"></select></div>
+        <div class="legend"><span><span class="dot" style="background:var(--dv)"></span>Da Vinci (compra)</span><span><span class="dot" style="background:var(--tm)"></span>Toumai (cuentas en participación)</span></div>
+        <div id="chVol"></div>
+      </div>
+      <div class="card">
+        <h2>Lo que hay que saber de cada modalidad</h2>
+        <div id="modeloTxt"></div>
+      </div>
+    </div>
+    <div class="card mt">
+      <h2>Punto de equilibrio por procedimiento</h2>
+      <p class="sub">Cirugías al año (de ese mismo tipo de costo) en las que el Da Vinci comprado iguala la tarifa Toumai. El costo fijo anual del Da Vinci se reparte entre todas las cirugías del robot, por eso lo relevante es el volumen total del programa.</p>
+      <div id="equil"></div>
+    </div>
+  </section>
+
+  <!-- CLINICO -->
+  <section class="view" id="v-clinico">
+    <div class="grid g2 mt">
+      <div class="card">
+        <h2>Las dos plataformas</h2>
+        <table class="cmp">
+          <tr><td></td><td style="color:var(--dv);font-weight:700">Da Vinci (Intuitive)</td><td style="color:var(--tm);font-weight:700">Toumai (MicroPort MedBot)</td></tr>
+          <tr><td>Trayectoria</td><td>Estándar del mercado desde 2000; mayor base de evidencia y de cirujanos formados. En Colombia desde 2010 (Clínica de Marly) y hoy en varias instituciones.</td><td>Plataforma china más reciente. Marcado CE MDR en junio de 2026 para urología, cirugía general, tórax y ginecología, incluida la telecirugía; aprobaciones en cerca de 20 países.</td></tr>
+          <tr><td>Evidencia clínica</td><td>Miles de publicaciones y ensayos; curvas de aprendizaje bien descritas por especialidad.</td><td>Series clínicas crecientes, sobre todo en China; menos datos comparativos a largo plazo.</td></tr>
+          <tr><td>Modelo ofertado al HUV</td><td>Compra (USD 2,5 millones) y consumibles en USD con vidas útiles por instrumento (6 a 20 usos).</td><td>Tarifa por cirugía en COP que incluye robot y consumibles ($10,5 a $14 millones), sin inversión.</td></tr>
+          <tr><td>Riesgo cambiario</td><td>Alto: inversión y consumibles en dólares.</td><td>Ninguno para HUV si la tarifa queda fija en pesos (verificar cláusula de ajuste).</td></tr>
+          <tr><td>Portafolio cotizado</td><td>26 bloques de consumibles; incluye cardiovascular (TECAB, mitral) y trasplante renal.</td><td>80 procedimientos en 8 especialidades; no cotiza cardiovascular ni trasplante.</td></tr>
+          <tr><td>Formación y soporte</td><td>Red regional de proctores y simuladores consolidada.</td><td>Exigir por contrato proctoría, simulador y soporte técnico local con tiempos de respuesta.</td></tr>
+          <tr><td>Telecirugía</td><td>No es su propuesta central.</td><td>Diferencial del producto: permitiría proctoría remota y referencia desde sedes como Cartago.</td></tr>
+        </table>
+        <div class="warnbox mt">Antes de contratar, verificar el registro sanitario INVIMA vigente de cada plataforma y que sus indicaciones cubran las especialidades a ofertar. El marcado CE de Toumai no menciona cabeza y cuello (cirugía transoral), aunque la oferta la incluye.</div>
+      </div>
+      <div class="card">
+        <h2>¿Dónde aporta el robot y dónde no?</h2>
+        <p class="sub">Concepto clínico para priorizar qué paquetes llevar a las EPS. Combina beneficio para el paciente y efecto sobre la tarifa.</p>
+        <h3>Prioridad alta: beneficio claro y estancia que se puede recortar</h3>
+        <ul class="tight">
+          <li><b>Prostatectomía radical</b>: la indicación robótica más consolidada (continencia, potencia, sangrado); alta en 24 a 48 horas frente a 5 días del paquete actual.</li>
+          <li><b>Cistectomía radical y linfadenectomía retroperitoneal</b>: paquetes con 5 días de UCI; la reducción de UCI compensa buena parte del costo del robot.</li>
+          <li><b>Cirugía de recto (resección anterior baja, ETM)</b>: menos conversión en pelvis estrecha y mejor calidad del mesorrecto.</li>
+          <li><b>Nefrectomía parcial</b>: menor tiempo de isquemia y más riñones preservados que con laparoscopia.</li>
+          <li><b>Esofagectomía y gastrectomía oncológicas</b>: menos complicaciones pulmonares; valor alto del paquete, por lo que el incremento porcentual es menor.</li>
+          <li><b>Lobectomía y segmentectomía; tumores de mediastino</b>: evitan toracotomía y esternotomía y reducen días de UCIN.</li>
+        </ul>
+        <h3>Prioridad media</h3>
+        <ul class="tight">
+          <li>Hemicolectomías, pared abdominal compleja, hiato y paraesofágica, bariátrica <b>revisional</b>, cirugía transoral (TORS), cáncer de endometrio.</li>
+        </ul>
+        <h3>Baja prioridad o difícil de justificar ante la EPS</h3>
+        <ul class="tight">
+          <li>Colecistectomía, hernia inguinal, manga y bypass primarios, adrenalectomía, adenomectomía: la laparoscopia logra resultados equivalentes y el robot puede duplicar la tarifa.</li>
+          <li>Tiroidectomía por abordaje remoto: el beneficio es estético, no oncológico.</li>
+          <li><b>Histerectomía radical por cáncer de cérvix</b>: desde el ensayo LACC (2018) la vía mínimamente invasiva mostró menor supervivencia que la abierta; restringir a casos seleccionados.</li>
+        </ul>
+        <div class="note mt">La curva de aprendizaje (≈20 a 40 casos en prostatectomía) alarga los tiempos de sala al inicio. Concentrar el programa en 2 o 3 especialidades y 3 o 4 cirujanos de consola acelera la curva y el volumen que hace viable cualquiera de los dos modelos.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METODO -->
+  <section class="view" id="v-metodo">
+    <div class="card mt">
+      <h2>Cómo se construye la tarifa robótica</h2>
+      <p class="sub">La tarifa robótica conserva las mismas inclusiones y exclusiones del paquete HUV. Si el paquete excluye la hospitalización (colon, gástrica, cabeza y cuello), la versión robótica también la excluye.</p>
+      <div class="formula">
+Costo robot por cx (Toumai)   = tarifa Toumai por cirugía (robot + consumibles)
+Costo robot por cx (Da Vinci) = consumibles USD × TRM × (1 + IVA)
+                                + precio USD × TRM × (factor de recuperación de capital + % mantenimiento) ÷ cirugías al año
+                                (o la tarifa de cuentas en participación Da Vinci, si se digita)
+
+Tarifa robótica PLENA     = Paquete HUV + Costo robot × (1 + margen HUV) + Honorario cirujano de consola
+                            + Derecho de sala adicional + días adicionales de estancia × valor día
+Tarifa robótica OPTIMIZADA = Tarifa plena − días de estancia ahorrados × valor día − % insumos sustituidos × Paquete HUV
+      </div>
+      <h3>Criterios de homologación</h3>
+      <ul class="tight">
+        <li><span class="pill pD">Directa</span> mismo procedimiento o el paquete HUV mínimamente invasivo equivalente.</li>
+        <li><span class="pill pA">Aproximada</span> paquete HUV de la misma familia (por ejemplo, gineco-oncología de alta complejidad para linfadenectomía pélvica).</li>
+        <li><span class="pill pN">Sin paquete</span> HUV no tiene paquete; se muestra solo el costo del robot y la referencia de mercado. Habría que construir el paquete.</li>
+        <li>Se corrigieron cruces del Excel original: timectomía (estaba con tiroidectomía retroesternal), nefroureterectomía (estaba con RTU de próstata), resección abdominoperineal (estaba con pared abdominal), proctectomía (estaba con tumor retroperitoneal), colectomía sigmoidea, lobectomía, resección en cuña, quistes mediastinales y decorticación (estaban con paquetes de otra vía o técnica).</li>
+        <li>Da Vinci cotiza por bloques (26). Cuando un procedimiento Toumai no tiene bloque propio se usa el más parecido y se marca como "proxy" en el desglose.</li>
+        <li>Los días robóticos esperados son estimaciones clínicas con protocolos de recuperación temprana (ERAS) en hospital universitario; ajustarlos con la experiencia del equipo.</li>
+      </ul>
+      <h3>Fuentes</h3>
+      <ul class="tight">
+        <li>Archivo Comparativo_Medicina_Robotica.xlsx: pestañas paquetes_huv (tarifa 2025), Davinci (consumibles USD, sin IVA; robot USD 2,5 millones) y Toumai (tarifa por cirugía y precio de referencia promedio de Bogotá).</li>
+        <li>TRM de referencia: $3.309,55 del 18 de noviembre de 2026 (editable).</li>
+      </ul>
+    </div>
+  </section>
+  <div class="footer">Elaborado por GrisData para el Hospital Universitario del Valle · Documento de análisis, no constituye oferta comercial.</div>
+</div>
+<div class="tt" id="tt"></div>
+
+<script>
+let DATA;
+(async()=>{
+const u=await GD.guard(); if(!u) return;
+try{ DATA=await GD.data('robotica-huv'); }catch(e){ document.getElementById('gd-load').innerHTML='No se pudieron cargar los datos del análisis. Recargue la página o inicie sesión de nuevo.'; return; }
+const DEF = {trm:3309.55, iva:0, margen:10, honor:2500000, sala:600000, piso:450000, ucin:1300000, uci:2400000, sust:5,
+  dvPrecio:2500000, dvVida:7, dvVol:200, dvMant:8, dvWacc:10, dvCP:0};
+const PDEF = [
+  ['grp','Tarifa robótica HUV'],
+  ['margen','Margen HUV sobre costo del robot (%)'],
+  ['honor','Honorario cirujano de consola ($/cx)','Adicional al honorario ya incluido en el paquete'],
+  ['sala','Derecho de sala adicional ($/cx)','Acople del robot y curva de aprendizaje'],
+  ['sust','Insumos sustituidos (% del paquete)','Solo escenario optimizado: Enseal, Ligasure, trocares…'],
+  ['grp','Valor día de estancia (reemplazar por tarifa HUV)'],
+  ['piso','Día hospitalización piso ($)'],['ucin','Día UCI intermedia ($)'],['uci','Día UCI adultos ($)'],
+  ['grp','Da Vinci'],
+  ['trm','TRM (COP por USD)'],['iva','IVA sobre consumibles (%)','Verificar exclusión de dispositivos médicos'],
+  ['dvPrecio','Precio del robot (USD)'],['dvVida','Vida útil (años)'],['dvVol','Cirugías robóticas al año'],
+  ['dvMant','Mantenimiento anual (% del precio)'],['dvWacc','Costo de capital anual (%)'],
+  ['dvCP','Tarifa Da Vinci en cuentas en participación ($/cx)','0 = usar modelo de compra']
+];
+let P = {...DEF};
+try{const s=JSON.parse(localStorage.getItem('huvRobotP')||'null'); if(s) P={...DEF,...s};}catch(e){}
+let SCEN='plena', SEL=null, SORT={k:null,d:1};
+
+const fmt = v => v==null||isNaN(v) ? '—' : '$' + Math.round(v).toLocaleString('es-CO');
+const fmtM = v => v==null||isNaN(v) ? '—' : '$' + (v/1e6).toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' M';
+const pct = v => v==null||isNaN(v) ? '—' : (v>0?'+':'') + (v*100).toLocaleString('es-CO',{maximumFractionDigits:0}) + '%';
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function crf(){ const n=+P.dvVida||1, i=(+P.dvWacc||0)/100; return i===0?1/n : i/(1-Math.pow(1+i,-n)); }
+function dvFixedAnnual(){ return P.dvPrecio*P.trm*(crf()+P.dvMant/100); }
+function dvCons(r){ return DATA.dv[r.dv].usd*P.trm*(1+P.iva/100); }
+function dvRobot(r, vol){ if(P.dvCP>0 && vol==null) return P.dvCP; return dvCons(r) + dvFixedAnnual()/(vol||P.dvVol); }
+
+function calc(r){
+  const h = r.huv ? DATA.huv[r.huv] : null, base = h ? h.tarifa : null;
+  const rates=[P.piso,P.ucin,P.uci];
+  let extra=0, ahorro=0;
+  for(let i=0;i<3;i++){ if(r.pkg_los[i]>0){ const d=r.los[i]-r.pkg_los[i]; if(d>0) extra+=d*rates[i]; else ahorro+=-d*rates[i]; } }
+  const sust = base ? base*P.sust/100 : 0;
+  const m = 1+P.margen/100, add = +P.honor + +P.sala;
+  const build = rob => { if(base==null||rob==null) return {plena:null,opt:null};
+    const plena = base + rob*m + add + extra; return {plena, opt: plena - ahorro - sust}; };
+  const dvr = dvRobot(r), tmr = r.tm_fee;
+  const dv = build(dvr), tm = build(tmr);
+  const dvt = dv[SCEN], tmt = tm[SCEN];
+  return {h, base, extra, ahorro, sust, add, m, dvr, tmr, dv, tm, dvt, tmt,
+    dvd: base&&dvt? dvt/base-1:null, tmd: base&&tmt? tmt/base-1:null,
+    dvRef: r.ref&&dvt? dvt/r.ref-1:null, tmRef: r.ref&&tmt? tmt/r.ref-1:null};
+}
+
+/* ---------- parámetros ---------- */
+function drawParams(){
+  const el=document.getElementById('params'); el.innerHTML='';
+  PDEF.forEach(p=>{
+    if(p[0]==='grp'){ el.insertAdjacentHTML('beforeend',`<div class="grp">${p[1]}</div>`); return; }
+    el.insertAdjacentHTML('beforeend',`<label>${p[1]}<input type="number" step="any" data-p="${p[0]}" value="${P[p[0]]}">${p[2]?`<span class="hint">${p[2]}</span>`:''}</label>`);
+  });
+  el.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{P[i.dataset.p]=parseFloat(i.value)||0; save(); render();}));
+}
+function save(){ try{localStorage.setItem('huvRobotP',JSON.stringify(P));}catch(e){} }
+document.getElementById('reset').onclick=()=>{P={...DEF};save();drawParams();render();};
+document.querySelectorAll('#scen button').forEach(b=>b.onclick=()=>{SCEN=b.dataset.s;document.querySelectorAll('#scen button').forEach(x=>x.classList.toggle('on',x===b));render();});
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+t.dataset.v));render();});
+
+/* ---------- tooltip ---------- */
+const TT=document.getElementById('tt');
+function tip(e,html){TT.innerHTML=html;TT.style.display='block';const x=Math.min(e.clientX+14,innerWidth-300);TT.style.left=x+'px';TT.style.top=(e.clientY+14)+'px';}
+function untip(){TT.style.display='none';}
+
+/* ---------- resumen ---------- */
+const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+function renderResumen(){
+  const rows=DATA.rows.map(r=>({r,c:calc(r)}));
+  const withP=rows.filter(x=>x.c.base);
+  const both=withP.filter(x=>x.r.tm_fee);
+  const tmInc=median(both.map(x=>x.c.tmd)), dvInc=median(both.map(x=>x.c.dvd));
+  const tmBelow=rows.filter(x=>x.c.tmRef!=null&&x.c.tmRef<0).length, refN=rows.filter(x=>x.c.tmRef!=null).length;
+  const pr=DATA.rows[0], prc=calc(pr);
+  const be = dvFixedAnnual()/(pr.tm_fee-dvCons(pr));
+  document.getElementById('kpis').innerHTML=`
+   <div class="card kpi"><div class="lab">Procedimientos analizados</div><div class="val">${DATA.rows.length}</div><div class="det">${withP.length} con paquete HUV homologado · ${DATA.rows.length-withP.length} sin paquete</div></div>
+   <div class="card kpi"><div class="lab">Incremento mediano de tarifa</div><div class="val"><span style="color:var(--tm)">${pct(tmInc)}</span> · <span style="color:var(--dv)">${pct(dvInc)}</span></div><div class="det">Toumai · Da Vinci, escenario ${SCEN==='plena'?'pleno':'optimizado'}</div></div>
+   <div class="card kpi"><div class="lab">Toumai: tarifas HUV bajo el mercado</div><div class="val">${tmBelow} de ${refN}</div><div class="det">Tarifa robótica HUV menor al promedio de Bogotá</div></div>
+   <div class="card kpi"><div class="lab">Equilibrio compra Da Vinci vs. Toumai</div><div class="val">${be>0&&isFinite(be)?Math.ceil(be)+' cx/año':'No se alcanza'}</div><div class="det">Referencia: prostatectomía radical, con los supuestos actuales</div></div>`;
+  // chart especialidad
+  const esp=[...new Set(DATA.rows.map(r=>r.esp))];
+  const ser=esp.map(e=>{const xs=both.filter(x=>x.r.esp===e);return {e,n:xs.length,tm:mean(xs.map(x=>x.c.tmd)),dv:mean(xs.map(x=>x.c.dvd))};}).filter(s=>s.n);
+  barChart('chEsp',ser);
+  scatter('chRef',rows.filter(x=>x.r.ref&&x.c.base));
+  // lectura
+  const top=[...both].sort((a,b)=>a.c.tmd-b.c.tmd);
+  const lo=top.slice(0,3).map(x=>`${x.r.proc} (${pct(x.c.tmd)})`).join(', ');
+  const hi=top.slice(-3).reverse().map(x=>`${x.r.proc} (${pct(x.c.tmd)})`).join(', ');
+  const cheaper=both.filter(x=>x.c.tmt<x.c.dvt).length;
+  document.getElementById('lectura').innerHTML=`<ul class="tight">
+   <li>El costo del robot por cirugía es casi fijo ($10,5 a $14 millones en Toumai; ${fmtM(dvRobot(pr))} en Da Vinci para prostatectomía con ${P.dvVol} cx/año). Por eso el incremento porcentual es menor en los paquetes de alto valor: <b>${lo}</b>; y mayor en los de bajo valor: <b>${hi}</b>.</li>
+   <li>Con los supuestos actuales, Toumai da una tarifa más baja que Da Vinci en <b>${cheaper} de ${both.length}</b> procedimientos comparables. El resultado depende sobre todo del volumen anual, la TRM y el costo de capital (pestaña Compra vs. cuentas en participación).</li>
+   <li>Ejemplo prostatectomía radical: paquete actual ${fmt(prc.base)} → con Toumai ${fmt(prc.tmt)} (${pct(prc.tmd)}) y con Da Vinci ${fmt(prc.dvt)} (${pct(prc.dvd)}). Referencia de mercado en Bogotá: ${fmt(pr.ref)}.</li>
+   <li>El escenario <b>optimizado</b> traslada a la EPS el ahorro de días de estancia y de insumos que la vía robótica reemplaza; es el argumento para que la subida "no sea mucha" en cistectomía, linfadenectomía retroperitoneal y tórax, donde los paquetes traen UCI y 4 a 10 días de piso.</li>
+  </ul>`;
+}
+
+function barChart(id,ser){
+  const W=620,rowH=44,top=10,left=170,right=60,H=top+ser.length*rowH+30;
+  const raw=Math.max(0.1,...ser.flatMap(s=>[s.tm||0,s.dv||0]))*1.12; const step=raw>2?1:0.5; const max=Math.ceil(raw/step)*step;
+  const x=v=>left+(W-left-right)*v/max;
+  let g=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Incremento por especialidad">`;
+  for(let v=0;v<=max+1e-9;v+=step){g+=`<line x1="${x(v)}" x2="${x(v)}" y1="${top}" y2="${H-24}" stroke="#e6ecf3"/><text x="${x(v)}" y="${H-8}" font-size="11" fill="#7a889c" text-anchor="middle">${pct(v)}</text>`;}
+  ser.forEach((s,i)=>{const y=top+i*rowH;
+    g+=`<text x="${left-8}" y="${y+22}" font-size="12" fill="#4a5a72" text-anchor="end">${esc(s.e)}</text>`;
+    [['dv',s.dv,'#2f5fa8','Da Vinci',4],['tm',s.tm,'#0f9a8e','Toumai',22]].forEach(([k,v,c,n,dy])=>{ if(v==null)return;
+      const w=Math.max(2,x(v)-left);
+      g+=`<path d="M${left},${y+dy} h${w-4} a4,4 0 0 1 4,4 v8 a4,4 0 0 1 -4,4 h-${w-4} z" fill="${c}" data-t="${esc(s.e)}<br>${n}: ${pct(v)} promedio (${s.n} proc.)"/>`;
+      g+=`<text x="${left+w+5}" y="${y+dy+12}" font-size="11" fill="#14233b">${pct(v)}</text>`;});
+  });
+  g+='</svg>';
+  const el=document.getElementById(id); el.innerHTML=g; bindTips(el);
+}
+function scatter(id,pts){
+  const W=620,H=380,l=60,b=40,t=12,r=16;
+  const vals=pts.flatMap(p=>[p.r.ref,p.c.tmt,p.c.dvt]).filter(Boolean);
+  const mx=Math.max(...vals)*1.05, mn=Math.min(...vals)*0.9;
+  const X=v=>l+(W-l-r)*(v-mn)/(mx-mn), Y=v=>H-b-(H-b-t)*(v-mn)/(mx-mn);
+  let g=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tarifa vs referencia">`;
+  for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4;
+    g+=`<line x1="${l}" x2="${W-r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e6ecf3"/><text x="${l-6}" y="${Y(v)+4}" font-size="11" fill="#7a889c" text-anchor="end">${(v/1e6).toFixed(0)} M</text>`;
+    g+=`<text x="${X(v)}" y="${H-b+16}" font-size="11" fill="#7a889c" text-anchor="middle">${(v/1e6).toFixed(0)} M</text>`;}
+  g+=`<line x1="${X(mn)}" y1="${Y(mn)}" x2="${X(mx)}" y2="${Y(mx)}" stroke="#9aa8bb" stroke-dasharray="4 4"/>`;
+  g+=`<text x="${X(mx)-4}" y="${Y(mx)+14}" font-size="11" fill="#7a889c" text-anchor="end">tarifa = mercado</text>`;
+  g+=`<text x="${(W+l)/2}" y="${H-6}" font-size="11.5" fill="#4a5a72" text-anchor="middle">Precio de referencia de mercado (Bogotá)</text>`;
+  g+=`<text transform="translate(14,${(H-b)/2}) rotate(-90)" font-size="11.5" fill="#4a5a72" text-anchor="middle">Tarifa robótica HUV</text>`;
+  pts.forEach(p=>{[['#2f5fa8',p.c.dvt,'Da Vinci',p.c.dvRef],['#0f9a8e',p.c.tmt,'Toumai',p.c.tmRef]].forEach(([c,v,n,d])=>{ if(!v)return;
+    g+=`<circle cx="${X(p.r.ref)}" cy="${Y(v)}" r="5" fill="${c}" stroke="#fff" stroke-width="2" data-t="<b>${esc(p.r.proc)}</b><br>${n}: ${fmt(v)}<br>Mercado: ${fmt(p.r.ref)} (${pct(d)})"/>`;});});
+  g+='</svg>';
+  const el=document.getElementById(id); el.innerHTML=g; bindTips(el);
+}
+function bindTips(el){el.querySelectorAll('[data-t]').forEach(n=>{n.addEventListener('mousemove',e=>tip(e,n.dataset.t));n.addEventListener('mouseleave',untip);n.style.cursor='pointer';});}
+
+/* ---------- tabla ---------- */
+const fEsp=document.getElementById('fEsp');
+[...new Set(DATA.rows.map(r=>r.esp))].forEach(e=>fEsp.insertAdjacentHTML('beforeend',`<option>${esc(e)}</option>`));
+['q','fEsp','fTipo'].forEach(id=>document.getElementById(id).addEventListener('input',renderTable));
+document.querySelectorAll('#tbl thead tr.h th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;SORT={k,d:SORT.k===k?-SORT.d:1};renderTable();});
+const TIPO={D:'Directa',A:'Aproximada',N:'Sin paquete'};
+function filtered(){
+  const q=document.getElementById('q').value.toLowerCase(), e=fEsp.value, t=document.getElementById('fTipo').value;
+  let xs=DATA.rows.map((r,i)=>({r,i,c:calc(r)})).filter(x=>(!e||x.r.esp===e)&&(!t||x.r.tipo===t)&&(!q||(x.r.proc+' '+(x.r.huv||'')+' '+(x.c.h?x.c.h.desc:'')).toLowerCase().includes(q)));
+  if(SORT.k){const g={proc:x=>x.r.proc,huvcod:x=>x.r.huv||'',huvt:x=>x.c.base??-1,dvr:x=>x.c.dvr,dvt:x=>x.c.dvt??-1,tmr:x=>x.r.tm_fee??-1,tmt:x=>x.c.tmt??-1,tmd:x=>x.c.tmd??-9,ref:x=>x.r.ref??-1}[SORT.k];
+    xs.sort((a,b)=>{const A=g(a),B=g(b);return (A>B?1:A<B?-1:0)*SORT.d;});}
+  return xs;
+}
+function renderTable(){
+  const xs=filtered(); const tb=document.querySelector('#tbl tbody'); let html=''; let lastE=null;
+  xs.forEach(({r,i,c})=>{
+    html+=`<tr data-i="${i}" class="${SEL===i?'sel':''}">
+      <td><div style="font-weight:600">${esc(r.proc)}</div><div class="esp">${esc(r.esp)}</div></td>
+      <td>${r.huv?`<b title="${esc(c.h.desc)}">${r.huv}</b><br><span class="pill p${r.tipo}">${TIPO[r.tipo]}</span>`:`<span class="pill pN">Sin paquete</span>`}</td>
+      <td class="n">${fmt(c.base)}</td>
+      <td class="n colDV">${fmt(c.dvr)}</td><td class="n">${fmt(c.dvt)}</td>
+      <td class="n colTM">${r.tm_fee?fmt(r.tm_fee):'<span class="small">No ofertado</span>'}</td><td class="n">${fmt(c.tmt)}</td>
+      <td class="n ${c.tmd>0?'up':'down'}">${pct(c.tmd)}</td>
+      <td class="n">${fmt(r.ref)}</td></tr>`;
+  });
+  tb.innerHTML=html;
+  tb.querySelectorAll('tr').forEach(tr=>tr.onclick=()=>{SEL=+tr.dataset.i;renderTable();renderDetail();});
+}
+function renderDetail(){
+  const el=document.getElementById('detail'); if(SEL==null)return;
+  const r=DATA.rows[SEL], c=calc(r), h=c.h;
+  const L=['piso','UCIN','UCI'];
+  const losTxt=a=>a.map((d,i)=>d?`${d} ${L[i]}`:'').filter(Boolean).join(' + ')||'no incluye';
+  const brk=(name,rob,o,color,extraRow)=>{ if(rob==null) return `<h3 style="color:${color}">${name}</h3><p class="small">No cotiza este procedimiento.</p>`;
+    if(!c.base) return `<h3 style="color:${color}">${name}</h3><table class="bd"><tr><td>Costo robot por cx</td><td class="n">${fmt(rob)}</td></tr>${extraRow||''}</table><p class="small">Sin paquete HUV: no se puede armar la tarifa integral.</p>`;
+    return `<h3 style="color:${color}">${name}</h3><table class="bd">
+      <tr><td>Paquete HUV ${r.huv}</td><td class="n">${fmt(c.base)}</td></tr>
+      <tr><td>Costo robot por cx</td><td class="n">${fmt(rob)}</td></tr>${extraRow||''}
+      <tr><td>Margen HUV (${P.margen}%)</td><td class="n">${fmt(rob*(c.m-1))}</td></tr>
+      <tr><td>Honorario consola + sala adicional</td><td class="n">${fmt(c.add)}</td></tr>
+      ${c.extra?`<tr><td>Días adicionales de estancia</td><td class="n">${fmt(c.extra)}</td></tr>`:''}
+      <tr class="tot"><td>Tarifa plena</td><td class="n">${fmt(o.plena)} <span class="small">${pct(o.plena/c.base-1)}</span></td></tr>
+      ${c.ahorro?`<tr class="minus"><td>− Ahorro de estancia</td><td class="n">−${fmt(c.ahorro)}</td></tr>`:''}
+      <tr class="minus"><td>− Insumos sustituidos (${P.sust}%)</td><td class="n">−${fmt(c.sust)}</td></tr>
+      <tr class="tot"><td>Tarifa optimizada</td><td class="n">${fmt(o.opt)} <span class="small">${pct(o.opt/c.base-1)}</span></td></tr></table>`;};
+  const dvExtra = P.dvCP>0 ? `<tr><td class="small" colspan="2">Tarifa de cuentas en participación digitada</td></tr>` :
+    `<tr><td class="small">· consumibles USD ${DATA.dv[r.dv].usd.toLocaleString('es-CO',{maximumFractionDigits:0})}${r.dv_proxy?' (bloque proxy)':''}</td><td class="n small">${fmt(dvCons(r))}</td></tr><tr><td class="small">· amortización, capital y mantenimiento</td><td class="n small">${fmt(dvFixedAnnual()/P.dvVol)}</td></tr>`;
+  const dvItems=DATA.dv[r.dv].items.map(i=>`<tr><td>${esc(i.desc)}</td><td class="n">${i.cant}</td><td class="n">${i.usos}</td><td class="n">${i.total.toLocaleString('es-CO',{maximumFractionDigits:0})}</td></tr>`).join('');
+  const tmItems=r.tm_cons.map(i=>`<tr><td>${esc(i.desc)}</td><td class="n">${i.cant}</td></tr>`).join('');
+  el.innerHTML=`<div class="esp">${esc(r.esp)}</div><h2 style="font-size:18px">${esc(r.proc)}</h2>
+    ${h?`<p style="margin:4px 0"><span class="pill p${r.tipo}">${TIPO[r.tipo]}</span> <b>${r.huv}</b> · ${esc(h.desc)}</p>`:'<p><span class="pill pN">Sin paquete HUV</span></p>'}
+    <p class="small">Estancia incluida en el paquete: <b>${losTxt(r.pkg_los)}</b> · esperada vía robótica: <b>${losTxt(r.los)}</b>${r.pkg_los.some(x=>x>0)?'':' (el paquete no incluye estancia: se mantiene excluida)'}</p>
+    ${r.nota?`<div class="note">${esc(r.nota)}</div>`:''}
+    ${brk('Da Vinci',c.dvr,c.dv,'var(--dv)',dvExtra)}
+    ${brk('Toumai',r.tm_fee,c.tm,'var(--tm)')}
+    ${r.ref?`<p class="small">Referencia de mercado Bogotá: <b>${fmt(r.ref)}</b> · Toumai ${pct(c.tmRef)} · Da Vinci ${pct(c.dvRef)}</p>`:''}
+    ${h?`<h3>Inclusiones paquete HUV</h3><div class="box">${esc(h.inc)}</div><h3>Exclusiones</h3><div class="box">${esc(h.exc)}</div>`:''}
+    <h3>Consumibles Da Vinci · bloque ${esc(r.dv)}</h3>
+    <table class="bd"><tr class="small"><td>Ítem</td><td class="n">Cant.</td><td class="n">Usos</td><td class="n">USD/cx</td></tr>${dvItems}</table>
+    ${tmItems?`<h3>Consumibles Toumai (incluidos en su tarifa)</h3><table class="bd"><tr class="small"><td>Ítem</td><td class="n">Cant.</td></tr>${tmItems}</table>`:''}`;
+}
+document.getElementById('csv').onclick=()=>{
+  const head=['Especialidad','Procedimiento','Homologacion','Cod HUV','Paquete HUV','Tarifa HUV','DV robot/cx','DV tarifa plena','DV tarifa optimizada','TM robot/cx','TM tarifa plena','TM tarifa optimizada','Ref mercado'];
+  const lines=[head.join(';')];
+  filtered().forEach(({r,c})=>lines.push([r.esp,r.proc,TIPO[r.tipo],r.huv||'',c.h?c.h.desc:'',c.base,c.dvr,c.dv.plena,c.dv.opt,r.tm_fee,c.tm.plena,c.tm.opt,r.ref].map(v=>v==null?'':typeof v==='number'?Math.round(v):'"'+String(v).replace(/"/g,'""')+'"').join(';')));
+  const blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='comparativo_robotica_huv.csv';a.click();
+};
+
+/* ---------- modelo ---------- */
+const selProc=document.getElementById('selProc');
+DATA.rows.forEach((r,i)=>{if(r.tm_fee)selProc.insertAdjacentHTML('beforeend',`<option value="${i}">${esc(r.proc)}</option>`);});
+selProc.addEventListener('input',renderModelo);
+function renderModelo(){
+  const r=DATA.rows[+selProc.value||0];
+  const W=620,H=340,l=70,b=40,t=14,rt=16, vmin=50,vmax=400;
+  const ys=[]; for(let v=vmin;v<=vmax;v+=10) ys.push([v,dvRobot(r,v)]);
+  const ymax=Math.max(r.tm_fee,...ys.map(p=>p[1]))*1.08, ymin=0;
+  const X=v=>l+(W-l-rt)*(v-vmin)/(vmax-vmin), Y=v=>H-b-(H-b-t)*(v-ymin)/(ymax-ymin);
+  let g=`<svg viewBox="0 0 ${W} ${H}" width="100%" id="volsvg">`;
+  for(let k=0;k<=4;k++){const v=ymax*k/4;g+=`<line x1="${l}" x2="${W-rt}" y1="${Y(v)}" y2="${Y(v)}" stroke="#e6ecf3"/><text x="${l-6}" y="${Y(v)+4}" font-size="11" fill="#7a889c" text-anchor="end">${(v/1e6).toFixed(0)} M</text>`;}
+  for(let v=vmin;v<=vmax;v+=50) g+=`<text x="${X(v)}" y="${H-b+16}" font-size="11" fill="#7a889c" text-anchor="middle">${v}</text>`;
+  g+=`<text x="${(W+l)/2}" y="${H-6}" font-size="11.5" fill="#4a5a72" text-anchor="middle">Cirugías robóticas al año</text>`;
+  g+=`<path d="${ys.map((p,i)=>(i?'L':'M')+X(p[0])+','+Y(p[1])).join(' ')}" fill="none" stroke="#2f5fa8" stroke-width="2"/>`;
+  g+=`<line x1="${l}" x2="${W-rt}" y1="${Y(r.tm_fee)}" y2="${Y(r.tm_fee)}" stroke="#0f9a8e" stroke-width="2"/>`;
+  const be=dvFixedAnnual()/(r.tm_fee-dvCons(r));
+  if(be>=vmin&&be<=vmax){g+=`<line x1="${X(be)}" x2="${X(be)}" y1="${t}" y2="${H-b}" stroke="#4a5a72" stroke-dasharray="4 4"/><text x="${X(be)+6}" y="${t+12}" font-size="12" fill="#14233b">Equilibrio ≈ ${Math.ceil(be)} cx/año</text>`;}
+  g+=`<line id="xh" y1="${t}" y2="${H-b}" stroke="#14233b" stroke-opacity=".25" style="display:none"/><rect x="${l}" y="${t}" width="${W-l-rt}" height="${H-b-t}" fill="transparent" id="hit"/></svg>`;
+  const el=document.getElementById('chVol'); el.innerHTML=g;
+  const svg=el.querySelector('svg'), hit=el.querySelector('#hit'), xh=el.querySelector('#xh');
+  hit.addEventListener('mousemove',e=>{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+    const v=Math.round(vmin+(p.x-l)/(W-l-rt)*(vmax-vmin));xh.setAttribute('x1',X(v));xh.setAttribute('x2',X(v));xh.style.display='';
+    tip(e,`<b>${v} cx/año</b><br>Da Vinci: ${fmt(dvRobot(r,v))}<br>Toumai: ${fmt(r.tm_fee)}`);});
+  hit.addEventListener('mouseleave',()=>{xh.style.display='none';untip();});
+  const fa=dvFixedAnnual();
+  document.getElementById('modeloTxt').innerHTML=`
+   <table class="bd">
+    <tr><td>Inversión Da Vinci</td><td class="n">${fmt(P.dvPrecio*P.trm)}</td></tr>
+    <tr><td>Costo fijo anual (capital ${P.dvWacc}% a ${P.dvVida} años + mantenimiento ${P.dvMant}%)</td><td class="n">${fmt(fa)}</td></tr>
+    <tr><td>Costo fijo por cirugía con ${P.dvVol} cx/año</td><td class="n">${fmt(fa/P.dvVol)}</td></tr>
+    <tr><td>Consumibles Da Vinci · ${esc(r.proc)}</td><td class="n">${fmt(dvCons(r))}</td></tr>
+    <tr class="tot"><td>Da Vinci por cirugía</td><td class="n">${fmt(dvRobot(r,P.dvVol))}</td></tr>
+    <tr class="tot"><td>Toumai por cirugía</td><td class="n">${fmt(r.tm_fee)}</td></tr></table>
+   <h3>Compra (Da Vinci)</h3><ul class="tight">
+    <li>HUV asume el riesgo de volumen: si el programa hace menos cirugías, el costo fijo por caso sube (ver curva).</li>
+    <li>Exposición a la TRM en la inversión y en cada consumible; los instrumentos tienen vidas limitadas y se reponen en USD.</li>
+    <li>Ventaja: a alto volumen el costo por caso baja y el activo queda en el hospital.</li></ul>
+   <h3>Cuentas en participación (Toumai)</h3><ul class="tight">
+    <li>Sin inversión ni riesgo de volumen; el costo por caso es fijo y en pesos.</li>
+    <li>Negociar: escalonamiento de la tarifa por volumen, ajuste anual atado a IPC y no a la TRM, mínimos garantizados, exclusividad, reposición del equipo por falla, proctoría y quién asume la cirugía si el robot falla (conversión).</li>
+    <li>El archivo no trae la tarifa de cuentas en participación de Da Vinci: si la envían, digítela en los supuestos y la página compara las dos ofertas en igualdad de condiciones.</li></ul>`;
+  // tabla equilibrio
+  const rows=DATA.rows.filter(x=>x.tm_fee).map(x=>({x,be:dvFixedAnnual()/(x.tm_fee-dvCons(x))}));
+  const grp={}; rows.forEach(o=>{const k=o.x.dv+'|'+o.x.tm_fee; (grp[k]=grp[k]||{dv:o.x.dv,fee:o.x.tm_fee,be:o.be,n:[]}).n.push(o.x.proc);});
+  document.getElementById('equil').innerHTML=`<div class="tablewrap" style="max-height:420px"><table><thead><tr><th>Bloque Da Vinci</th><th class="n">Consumibles DV</th><th class="n">Tarifa Toumai</th><th class="n">Equilibrio (cx/año)</th><th>Procedimientos</th></tr></thead><tbody>${
+    Object.values(grp).sort((a,b)=>a.be-b.be).map(o=>`<tr style="cursor:default"><td>${esc(o.dv)}</td><td class="n">${fmt(DATA.dv[o.dv].usd*P.trm*(1+P.iva/100))}</td><td class="n">${fmt(o.fee)}</td><td class="n"><b>${o.be>0?Math.ceil(o.be):'No se alcanza'}</b></td><td class="small">${o.n.map(esc).join(' · ')}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+function render(){
+  const v=document.querySelector('.view.on').id;
+  if(v==='v-resumen')renderResumen();
+  if(v==='v-comparativo'){renderTable();renderDetail();}
+  if(v==='v-modelo')renderModelo();
+}
+drawParams(); render();
+document.getElementById('gd-load').remove();
+})();
+</script>
+</body>
+</html>
