@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comparativo HUV vs FVL | Hospital Universitario del Valle · GrisData</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/grisdata.css">
+<style>.hrow2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}.p-up{color:var(--ok)}.p-dn{color:var(--bad);font-weight:700}.p-hv{color:var(--warn)}a.cu{color:var(--acc);font-weight:700;text-decoration:none}</style>
+<script src="assets/auth.js"></script></head>
+<body class="gd-lock"><main>
+<div class="topbar"><a class="logo" href="proyectos.html" title="Proyectos HUV"><img src="assets/grisdata.png" alt="GrisData"></a>
+<div class="user" id="gd-user" hidden><a class="lnk" href="homologacion-tarifas-huv.html">← Homologación</a><span class="av" id="gd-av"></span><span id="gd-un"></span><button type="button" id="gd-out" class="ghost">Salir</button></div></div>
+<header class="hd"><div class="hl"><img src="assets/huv.png" alt="Hospital Universitario del Valle"></div><h1>Comparativo HUV vs FVL</h1><p class="sb">Tarifas del Manual HUV frente al manual de la Fundación Valle del Lili</p>
+<p class="desc">Razón = tarifa HUV ÷ tarifa FVL 2026 (manual 2025 + ajuste). En cirugía, FVL es la liquidación única sin materiales por actividad (más de 170 UVR), por lo que la razón se ve algo inflada.</p>
+<span class="note" id="info">Cargando…</span></header>
+<div class="card"><h2><span class="n">1</span>Filtros</h2><div class="hrow2">
+<div><label for="mn">Razón mínima (HUV/FVL)</label><input type="number" id="mn" value="1.5" step="0.1" min="0"></div>
+<div><label for="mx">Razón máxima</label><input type="number" id="mx" step="0.1" min="0" placeholder="sin tope"></div>
+<div><label for="tp">Tipo FVL</label><select id="tp"><option value="">Todos</option><option value="CX_UVR">Cirugía (UVR)</option><option value="VALOR">Valor fijo</option></select></div>
+<div><label for="q">Código o texto</label><input type="text" id="q" placeholder="CUPS o nombre"></div>
+<div><label for="lim">Filas</label><select id="lim"><option>100</option><option selected>200</option><option>500</option></select></div>
+<div><button type="button" id="go">Consultar</button></div></div></div>
+<div class="card"><h2><span class="n">2</span>Resultado</h2><div class="msg" id="m"></div><div class="sc"><table id="t"></table></div></div>
+<footer class="ft"><p>© 2026 GrisData. Todos los derechos reservados.</p><p>Diseño de Ing. Diego Campos · GrisData</p></footer>
+</main>
+<script>
+var API=(window.GD_API||'https://api.grisdata.com/huv').replace(/\/$/,''),$=function(i){return document.getElementById(i)};
+var fm=function(n){return n==null?'—':'$ '+Math.round(n).toLocaleString('es-CO')};
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ir(){var q='a=versus&min='+encodeURIComponent($('mn').value)+'&max='+encodeURIComponent($('mx').value)+'&tipo='+$('tp').value+'&q='+encodeURIComponent($('q').value.trim())+'&lim='+$('lim').value;
+ $('m').textContent='Consultando…';
+ fetch(API+'/tarifas.php?'+q,{credentials:'include'}).then(function(r){if(r.status===401){GD.guard();throw new Error('Sesión vencida')}return r.json()}).then(function(r){
+  if(!r.ok)throw new Error(r.error||'Error');var it=r.items||[];
+  $('info').textContent='Vigencia '+r.vigencia+' · ajuste FVL '+((r.ajuste_fvl-1)*100).toLocaleString('es-CO',{maximumFractionDigits:1})+'%';
+  $('m').textContent=it.length+' código(s)'+(it.length>=+$('lim').value?' (límite alcanzado; afina los filtros).':'.');
+  $('t').innerHTML='<tr><th class="l">CUPS</th><th class="l">Descripción</th><th class="l">Tipo</th><th>Tarifa HUV</th><th>FVL 2026</th><th>Razón</th></tr>'+it.map(function(x){var z=+x.razon;
+   return '<tr><td class="l"><a class="cu" href="homologacion-tarifas-huv.html?cups='+x.cups+'">'+esc(x.cups_huv||x.cups)+'</a></td><td class="l">'+esc(x.descripcion)+'</td><td class="l">'+(x.tipo==='CX_UVR'?'Cirugía '+(+x.uvr)+' UVR'+(+x.material_actividad?' (sin mat.)':''):'Valor fijo')+(x.tipo_tarifa==='PROPIA'?' · HUV propia':'')+'</td><td>'+fm(x.tarifa_huv)+'</td><td>'+fm(x.tarifa_fvl)+'</td><td class="'+(z>1.12?'p-dn':z<0.88?'p-hv':'')+'">'+z.toLocaleString('es-CO',{maximumFractionDigits:2})+'×</td></tr>'}).join('')}).catch(function(e){$('m').textContent='No se pudo consultar: '+e.message})}
+$('go').onclick=ir;$('q').addEventListener('keydown',function(e){if(e.key==='Enter')ir()});
+GD.guard().then(function(u){if(u)ir()});
+</script></body></html>
